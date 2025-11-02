@@ -21,6 +21,15 @@ cd ..
 # Rode frontend localmente: cd FrontEnd && npm start
 ```
 
+### Atenção!!!
+```bash
+O sistema operacional **Windows** costuma converter automaticamente arquivos `.sh` para o formato de quebra de linha **CRLF**, enquanto sistemas **Linux** (como os usados em contêineres Docker) utilizam **LF**.  
+
+Essa diferença pode causar falhas na execução do script **`db-init.sh`** durante o deploy com **docker-compose**, exibindo erros como:
+
+/bin/bash^M: bad interpreter: No such file or directory
+```
+
 ---
 
 ## Pré-requisitos

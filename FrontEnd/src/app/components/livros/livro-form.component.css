@@ -1,0 +1,13 @@
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+}
+
+.card-title {
+  color: #495057;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 10px;
+}

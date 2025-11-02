@@ -1,0 +1,249 @@
+<div class="container mt-4">
+  <h2>{{ readOnly ? 'Detalhes do Livro' : (isEditMode ? 'Editar Livro' : 'Novo Livro') }}</h2>
+
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error || backendErrors.length" class="alert alert-danger" role="alert">
+    <div *ngIf="error" class="mb-1">{{ error }}</div>
+    <ul *ngIf="backendErrors.length" class="mb-0 ps-3">
+      <li *ngFor="let msg of backendErrors">{{ msg }}</li>
+    </ul>
+  </div>
+
+  <form [formGroup]="livroForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Informações Básicas</h5>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="titulo" class="form-label">Título *</label>
+            <ng-container *ngIf="!readOnly; else tituloView">
+              <input
+                type="text"
+                class="form-control"
+                id="titulo"
+                formControlName="titulo"
+                [class.is-invalid]="livroForm.get('titulo')?.invalid && livroForm.get('titulo')?.touched">
+              <div class="invalid-feedback" *ngIf="!readOnly && livroForm.get('titulo')?.errors?.['required']">
+                Título é obrigatório
+              </div>
+              <div class="invalid-feedback" *ngIf="!readOnly && livroForm.get('titulo')?.errors?.['requiredTrim']">
+                Título não pode ser vazio (apenas espaços)
+              </div>
+              <div class="invalid-feedback" *ngIf="livroForm.get('titulo')?.errors?.['server']">
+                {{ livroForm.get('titulo')?.errors?.['server'] }}
+              </div>
+            </ng-container>
+            <ng-template #tituloView>
+              <div class="form-control-plaintext bg-light border rounded px-2">{{ livroForm.get('titulo')?.value }}</div>
+            </ng-template>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="editora" class="form-label">Editora *</label>
+            <ng-container *ngIf="!readOnly; else editoraView">
+              <input
+                type="text"
+                class="form-control"
+                id="editora"
+                formControlName="editora"
+                [class.is-invalid]="livroForm.get('editora')?.invalid && livroForm.get('editora')?.touched">
+              <div class="invalid-feedback" *ngIf="!readOnly && livroForm.get('editora')?.errors?.['required']">
+                Editora é obrigatória
+              </div>
+              <div class="invalid-feedback" *ngIf="!readOnly && livroForm.get('editora')?.errors?.['requiredTrim']">
+                Editora não pode ser vazia (apenas espaços)
+              </div>
+              <div class="invalid-feedback" *ngIf="livroForm.get('editora')?.errors?.['server']">
+                {{ livroForm.get('editora')?.errors?.['server'] }}
+              </div>
+            </ng-container>
+            <ng-template #editoraView>
+              <div class="form-control-plaintext bg-light border rounded px-2">{{ livroForm.get('editora')?.value }}</div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="anoPublicacao" class="form-label">Ano de Publicação</label>
+            <ng-container *ngIf="!readOnly; else anoView">
+              <input
+                type="number"
+                class="form-control"
+                id="anoPublicacao"
+                formControlName="anoPublicacao">
+            </ng-container>
+            <ng-template #anoView>
+              <div class="form-control-plaintext bg-light border rounded px-2">{{ livroForm.get('anoPublicacao')?.value || '-' }}</div>
+            </ng-template>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="isbn" class="form-label">ISBN *</label>
+            <ng-container *ngIf="!readOnly; else isbnView">
+              <input
+                type="text"
+                class="form-control"
+                id="isbn"
+                formControlName="isbn"
+                [class.is-invalid]="livroForm.get('isbn')?.invalid && livroForm.get('isbn')?.touched">
+              <div class="invalid-feedback" *ngIf="!readOnly && livroForm.get('isbn')?.errors?.['required']">
+                ISBN é obrigatório
+              </div>
+              <div class="invalid-feedback" *ngIf="!readOnly && livroForm.get('isbn')?.errors?.['pattern']">
+                ISBN deve estar em um formato válido (10 ou 13 dígitos, com ou sem hífens)
+              </div>
+              <div class="invalid-feedback" *ngIf="livroForm.get('isbn')?.errors?.['server']">
+                {{ livroForm.get('isbn')?.errors?.['server'] }}
+              </div>
+            </ng-container>
+            <ng-template #isbnView>
+              <div class="form-control-plaintext bg-light border rounded px-2">{{ livroForm.get('isbn')?.value }}</div>
+            </ng-template>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="idAssunto" class="form-label">Assunto *</label>
+            <ng-container *ngIf="!readOnly; else assuntoView">
+              <select
+                class="form-select"
+                id="idAssunto"
+                formControlName="idAssunto"
+                [class.is-invalid]="livroForm.get('idAssunto')?.invalid && livroForm.get('idAssunto')?.touched">
+                <option [ngValue]="null">Selecione...</option>
+                <option *ngFor="let assunto of assuntos" [ngValue]="assunto.idAssunto">
+                  {{ assunto.descricao }}
+                </option>
+              </select>
+              <div class="invalid-feedback" *ngIf="!readOnly && livroForm.get('idAssunto')?.errors?.['required']">
+                Assunto é obrigatório
+              </div>
+              <div class="invalid-feedback" *ngIf="livroForm.get('idAssunto')?.errors?.['server']">
+                {{ livroForm.get('idAssunto')?.errors?.['server'] }}
+              </div>
+            </ng-container>
+            <ng-template #assuntoView>
+              <div class="form-control-plaintext bg-light border rounded px-2">{{ assuntoDescricao }}</div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="isEditMode || readOnly">
+          <div class="col-md-12 mb-3">
+            <ng-container *ngIf="!readOnly; else ativoView">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="ativo"
+                  formControlName="ativo">
+                <label class="form-check-label" for="ativo">
+                  Ativo
+                </label>
+              </div>
+            </ng-container>
+            <ng-template #ativoView>
+              <label class="form-label d-block">Status</label>
+              <span class="badge" [ngClass]="livroForm.get('ativo')?.value ? 'bg-success' : 'bg-secondary'">
+                {{ livroForm.get('ativo')?.value ? 'Ativo' : 'Inativo' }}
+              </span>
+            </ng-template>
+          </div>
+        </div>
+
+        <h5 class="card-title mt-4">Autores *</h5>
+        <div class="mb-3">
+          <ng-container *ngIf="!readOnly; else autoresView">
+            <select
+              class="form-select"
+              formControlName="idAutores"
+              multiple
+              size="5"
+              [class.is-invalid]="livroForm.get('idAutores')?.invalid && livroForm.get('idAutores')?.touched">
+              <option *ngFor="let autor of autores" [ngValue]="autor.idAutor">
+                {{ autor.nome }}
+              </option>
+            </select>
+            <small class="form-text text-muted">Mantenha Ctrl pressionado para selecionar múltiplos autores</small>
+            <div class="invalid-feedback" *ngIf="!readOnly && livroForm.get('idAutores')?.errors?.['required']">
+              Selecione ao menos um autor
+            </div>
+            <div class="invalid-feedback" *ngIf="livroForm.get('idAutores')?.errors?.['server']">
+              {{ livroForm.get('idAutores')?.errors?.['server'] }}
+            </div>
+          </ng-container>
+          <ng-template #autoresView>
+            <div class="form-control-plaintext bg-light border rounded px-2">{{ autoresNomes || '-' }}</div>
+          </ng-template>
+        </div>
+
+        <h5 class="card-title mt-4">Preços</h5>
+        <div formArrayName="precos" *ngIf="!readOnly; else precosView">
+          <div *ngFor="let preco of precos.controls; let i = index" [formGroupName]="i" class="row mb-2">
+            <div class="col-md-5">
+              <label class="form-label">Forma de Pagamento *</label>
+              <select class="form-select" formControlName="idFormaPagamento" [class.is-invalid]="preco.get('idFormaPagamento')?.invalid && preco.get('idFormaPagamento')?.touched">
+                <option [ngValue]="null">Selecione...</option>
+                <option *ngFor="let fp of formasPagamento" [ngValue]="fp.idFormaPagamento">
+                  {{ fp.nome }}
+                </option>
+              </select>
+              <div class="invalid-feedback" *ngIf="preco.get('idFormaPagamento')?.errors?.['required']">Selecione a forma de pagamento</div>
+            </div>
+            <div class="col-md-5">
+              <label class="form-label">Valor *</label>
+              <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="number" min="0.01" step="0.01" class="form-control" formControlName="valor" placeholder="0.00" [class.is-invalid]="preco.get('valor')?.invalid && preco.get('valor')?.touched" (blur)="formatValor(i, $event)">
+              </div>
+              <small class="text-muted">Informe o valor em reais (R$) com centavos.</small>
+              <div class="invalid-feedback" *ngIf="preco.get('valor')?.errors?.['required']">Informe o valor</div>
+              <div class="invalid-feedback" *ngIf="preco.get('valor')?.errors?.['min']">Valor deve ser maior que 0</div>
+            </div>
+            <div class="col-md-2 d-flex align-items-end" *ngIf="!readOnly">
+              <button type="button" class="btn btn-danger btn-sm" (click)="removePrecoField(i)">
+                Remover
+              </button>
+            </div>
+          </div>
+          <div class="text-danger small" *ngIf="livroForm.get('precos')?.errors?.['minLengthArray']">
+            Informe ao menos uma forma de pagamento com valor.
+          </div>
+        </div>
+        <ng-template #precosView>
+          <div *ngFor="let preco of precos.controls" class="row mb-2">
+            <div class="col-md-7">
+              <div class="form-control-plaintext bg-light border rounded px-2">
+                {{ formaPagamentoNome(preco.get('idFormaPagamento')?.value) }}
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-control-plaintext bg-light border rounded px-2">
+                {{ preco.get('valor')?.value | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <button *ngIf="!readOnly" type="button" class="btn btn-secondary btn-sm mt-2" (click)="addPrecoField()">
+          + Adicionar Preço
+        </button>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        {{ readOnly ? 'Voltar' : 'Cancelar' }}
+      </button>
+      <button *ngIf="!readOnly" type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ isEditMode ? 'Atualizar' : 'Criar' }}
+      </button>
+    </div>
+  </form>
+</div>

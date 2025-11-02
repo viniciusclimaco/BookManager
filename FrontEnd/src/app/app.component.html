@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">📚 BookManager</a>
+    <button class="navbar-toggler" type="button" (click)="toggleNav()" [attr.aria-expanded]="!navCollapsed">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [class.show]="!navCollapsed" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/livros" routerLinkActive="active" (click)="closeNav()">Livros</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/autores" routerLinkActive="active" (click)="closeNav()">Autores</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/assuntos" routerLinkActive="active" (click)="closeNav()">Assuntos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/relatorios" routerLinkActive="active" (click)="closeNav()">📊 Relatórios</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
+
+<footer class="bg-light text-center py-3 mt-5">
+  <div class="container">
+    <p class="text-muted mb-0">BookManager &copy; 2025 - Sistema de Gerenciamento de Livros</p>
+  </div>
+</footer>

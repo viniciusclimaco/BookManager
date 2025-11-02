@@ -1,0 +1,87 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gerenciamento de Assuntos</h2>
+    <button class="btn btn-primary" (click)="openForm()" *ngIf="!showForm">
+      + Novo Assunto
+    </button>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" (click)="error = null"></button>
+  </div>
+
+  <div *ngIf="showForm" class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">{{ editingId ? 'Editar Assunto' : 'Novo Assunto' }}</h5>
+      <div class="mb-3">
+        <label for="assuntoDescricao" class="form-label">Descrição do Assunto</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="assuntoDescricao" 
+          [(ngModel)]="assuntoDescricao"
+          placeholder="Digite a descrição do assunto">
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary" (click)="saveAssunto()" [disabled]="!assuntoDescricao.trim()">
+          Salvar
+        </button>
+        <button class="btn btn-secondary" (click)="closeForm()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && assuntos.length === 0" class="alert alert-info">
+    Nenhum assunto cadastrado.
+  </div>
+
+  <div *ngIf="!loading && assuntos.length > 0" class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th style="width: 10%">ID</th>
+          <th style="width: 60%">Descrição</th>
+          <th style="width: 15%">Status</th>
+          <th style="width: 15%">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let assunto of assuntos">
+          <td>{{ assunto.idAssunto }}</td>
+          <td>{{ assunto.descricao }}</td>
+          <td>
+            <span class="badge" [ngClass]="assunto.ativo ? 'bg-success' : 'bg-secondary'">
+              {{ assunto.ativo ? 'Ativo' : 'Inativo' }}
+            </span>
+          </td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <button class="btn btn-warning" (click)="openForm(assunto)" title="Editar">
+                ✏️
+              </button>
+              <button 
+                class="btn" 
+                [ngClass]="assunto.ativo ? 'btn-secondary' : 'btn-success'"
+                (click)="toggleStatus(assunto)" 
+                [title]="assunto.ativo ? 'Desativar' : 'Ativar'">
+                {{ assunto.ativo ? '🔒' : '🔓' }}
+              </button>
+              <button class="btn btn-danger" (click)="deleteAssunto(assunto.idAssunto)" title="Excluir">
+                🗑️
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

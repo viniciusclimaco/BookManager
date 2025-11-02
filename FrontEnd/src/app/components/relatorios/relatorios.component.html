@@ -1,0 +1,259 @@
+<div class="container mt-4">
+  <h2 class="mb-4">📊 Relatórios</h2>
+  <p class="text-muted mb-4">Gere relatórios em PDF, Excel ou Word com informações consolidadas do sistema.</p>
+
+  <!-- Relatório 1: Livros por Assunto -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">
+        <i class="bi bi-book"></i> Relatório 1: Livros Agrupados por Assunto
+      </h5>
+    </div>
+    <div class="card-body">
+      <p class="card-text text-muted">
+        Exibe todos os livros organizados por assunto, incluindo título, editora, autores, ano de publicação e ISBN.
+      </p>
+
+      <form [formGroup]="formRelatorio1">
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Formato do Relatório *</label>
+            <select class="form-select" formControlName="formato">
+              <option value="PDF">PDF</option>
+              <option value="EXCEL" disabled>Excel (indisponível)</option>
+              <option value="WORD" disabled>Word (indisponível)</option>
+            </select>
+            <div class="form-text text-muted">Atualmente, apenas PDF está disponível.</div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Filtrar por Assunto</label>
+            <select class="form-select" formControlName="idAssunto">
+              <option [value]="null">Todos os Assuntos</option>
+              <option *ngFor="let assunto of assuntos" [value]="assunto.idAssunto">
+                {{ assunto.descricao }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Ano Publicação (De)</label>
+            <input type="number" class="form-control" formControlName="dataInicio" placeholder="Ex: 2020">
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Ano Publicação (Até)</label>
+            <input type="number" class="form-control" formControlName="dataFim" placeholder="Ex: 2024">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" formControlName="apenasAtivos" id="ativosRel1">
+              <label class="form-check-label" for="ativosRel1">
+                Apenas livros ativos
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="successRelatorio1" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successRelatorio1 }}
+          <button type="button" class="btn-close" (click)="successRelatorio1 = null"></button>
+        </div>
+
+        <div *ngIf="errorRelatorio1" class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ errorRelatorio1 }}
+          <button type="button" class="btn-close" (click)="errorRelatorio1 = null"></button>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="gerarRelatorio1()"
+            [disabled]="loadingRelatorio1">
+            <span *ngIf="loadingRelatorio1" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!loadingRelatorio1" class="bi bi-file-earmark-arrow-down"></i>
+            {{ loadingRelatorio1 ? 'Gerando...' : 'Gerar Relatório' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="limparRelatorio1()">
+            Limpar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Relatório 2: Autores por Livro -->
+  <div class="card mb-4">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0">
+        <i class="bi bi-people"></i> Relatório 2: Autores com seus Livros
+      </h5>
+    </div>
+    <div class="card-body">
+      <p class="card-text text-muted">
+        Lista todos os autores e os livros que cada um escreveu, incluindo detalhes como editora e ano de publicação.
+      </p>
+
+      <form [formGroup]="formRelatorio2">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Formato do Relatório *</label>
+            <select class="form-select" formControlName="formato">
+              <option value="PDF">PDF</option>
+              <option value="EXCEL" disabled>Excel (indisponível)</option>
+              <option value="WORD" disabled>Word (indisponível)</option>
+            </select>
+            <div class="form-text text-muted">Atualmente, apenas PDF está disponível.</div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Filtrar por Autor</label>
+            <select class="form-select" formControlName="idAutor">
+              <option [value]="null">Todos os Autores</option>
+              <option *ngFor="let autor of autores" [value]="autor.idAutor">
+                {{ autor.nome }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Ordenar Por</label>
+            <select class="form-select" formControlName="ordenarPor">
+              <option value="autor">Nome do Autor</option>
+              <option value="livro">Título do Livro</option>
+              <option value="ano">Ano de Publicação</option>
+            </select>
+          </div>
+        </div>
+
+        <div *ngIf="successRelatorio2" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successRelatorio2 }}
+          <button type="button" class="btn-close" (click)="successRelatorio2 = null"></button>
+        </div>
+
+        <div *ngIf="errorRelatorio2" class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ errorRelatorio2 }}
+          <button type="button" class="btn-close" (click)="errorRelatorio2 = null"></button>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="gerarRelatorio2()"
+            [disabled]="loadingRelatorio2">
+            <span *ngIf="loadingRelatorio2" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!loadingRelatorio2" class="bi bi-file-earmark-arrow-down"></i>
+            {{ loadingRelatorio2 ? 'Gerando...' : 'Gerar Relatório' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="limparRelatorio2()">
+            Limpar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Relatório 3: Livros com Preços -->
+  <div class="card mb-4">
+    <div class="card-header bg-info text-white">
+      <h5 class="mb-0">
+        <i class="bi bi-cash-coin"></i> Relatório 3: Livros com Preços e Formas de Pagamento
+      </h5>
+    </div>
+    <div class="card-body">
+      <p class="card-text text-muted">
+        Apresenta os livros com seus respectivos preços organizados por forma de pagamento, permitindo análise de valores.
+      </p>
+
+      <form [formGroup]="formRelatorio3">
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Formato do Relatório *</label>
+            <select class="form-select" formControlName="formato">
+              <option value="PDF">PDF</option>
+              <option value="EXCEL" disabled>Excel (indisponível)</option>
+              <option value="WORD" disabled>Word (indisponível)</option>
+            </select>
+            <div class="form-text text-muted">Atualmente, apenas PDF está disponível.</div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Valor Mínimo</label>
+            <input type="number" step="0.01" class="form-control" formControlName="valorMinimo" placeholder="0.00">
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Valor Máximo</label>
+            <input type="number" step="0.01" class="form-control" formControlName="valorMaximo" placeholder="999.99">
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Forma de Pagamento</label>
+            <select class="form-select" formControlName="idFormaPagamento">
+              <option [value]="null">Todas as Formas</option>
+              <option *ngFor="let forma of formasPagamento" [value]="forma.idFormaPagamento">
+                {{ forma.nome }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" formControlName="apenasAtivos" id="ativosRel3">
+              <label class="form-check-label" for="ativosRel3">
+                Apenas livros ativos
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="successRelatorio3" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successRelatorio3 }}
+          <button type="button" class="btn-close" (click)="successRelatorio3 = null"></button>
+        </div>
+
+        <div *ngIf="errorRelatorio3" class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ errorRelatorio3 }}
+          <button type="button" class="btn-close" (click)="errorRelatorio3 = null"></button>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button
+            type="button"
+            class="btn btn-info"
+            (click)="gerarRelatorio3()"
+            [disabled]="loadingRelatorio3">
+            <span *ngIf="loadingRelatorio3" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!loadingRelatorio3" class="bi bi-file-earmark-arrow-down"></i>
+            {{ loadingRelatorio3 ? 'Gerando...' : 'Gerar Relatório' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="limparRelatorio3()">
+            Limpar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Informações Adicionais -->
+  <div class="alert alert-light border">
+    <h6 class="alert-heading">ℹ️ Informações sobre os Relatórios</h6>
+    <hr>
+    <ul class="mb-0">
+      <li><strong>PDF:</strong> Ideal para visualização e impressão (disponível)</li>
+      <li class="text-muted"><strong>Excel:</strong> Permite análise e manipulação dos dados (temporariamente indisponível)</li>
+      <li class="text-muted"><strong>Word:</strong> Facilita edição e personalização do relatório (temporariamente indisponível)</li>
+    </ul>
+    <p class="mt-3 mb-0">
+      <strong>Observação:</strong> Os relatórios são gerados pelo backend usando ReportViewer.
+      Certifique-se de que o backend está configurado corretamente para gerar os relatórios.
+    </p>
+  </div>
+</div>

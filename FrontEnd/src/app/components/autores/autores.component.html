@@ -1,0 +1,87 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gerenciamento de Autores</h2>
+    <button class="btn btn-primary" (click)="openForm()" *ngIf="!showForm">
+      + Novo Autor
+    </button>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" (click)="error = null"></button>
+  </div>
+
+  <div *ngIf="showForm" class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">{{ editingId ? 'Editar Autor' : 'Novo Autor' }}</h5>
+      <div class="mb-3">
+        <label for="autorNome" class="form-label">Nome do Autor</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="autorNome" 
+          [(ngModel)]="autorNome"
+          placeholder="Digite o nome do autor">
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary" (click)="saveAutor()" [disabled]="!autorNome.trim()">
+          Salvar
+        </button>
+        <button class="btn btn-secondary" (click)="closeForm()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && autores.length === 0" class="alert alert-info">
+    Nenhum autor cadastrado.
+  </div>
+
+  <div *ngIf="!loading && autores.length > 0" class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th style="width: 10%">ID</th>
+          <th style="width: 60%">Nome</th>
+          <th style="width: 15%">Status</th>
+          <th style="width: 15%">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let autor of autores">
+          <td>{{ autor.idAutor }}</td>
+          <td>{{ autor.nome }}</td>
+          <td>
+            <span class="badge" [ngClass]="autor.ativo ? 'bg-success' : 'bg-secondary'">
+              {{ autor.ativo ? 'Ativo' : 'Inativo' }}
+            </span>
+          </td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group">
+              <button class="btn btn-warning" (click)="openForm(autor)" title="Editar">
+                ✏️
+              </button>
+              <button 
+                class="btn" 
+                [ngClass]="autor.ativo ? 'btn-secondary' : 'btn-success'"
+                (click)="toggleStatus(autor)" 
+                [title]="autor.ativo ? 'Desativar' : 'Ativar'">
+                {{ autor.ativo ? '🔒' : '🔓' }}
+              </button>
+              <button class="btn btn-danger" (click)="deleteAutor(autor.idAutor)" title="Excluir">
+                🗑️
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

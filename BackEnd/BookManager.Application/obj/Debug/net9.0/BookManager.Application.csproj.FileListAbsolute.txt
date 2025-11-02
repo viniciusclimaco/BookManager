@@ -1,0 +1,17 @@
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\BookManager.Application.csproj.AssemblyReference.cache
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\BookManager.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\BookManager.Application.AssemblyInfoInputs.cache
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\BookManager.Application.AssemblyInfo.cs
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\BookManager.Application.csproj.CoreCompileInputs.cache
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\bin\Debug\net9.0\BookManager.Application.deps.json
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\bin\Debug\net9.0\BookManager.Application.dll
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\bin\Debug\net9.0\BookManager.Application.pdb
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\bin\Debug\net9.0\BookManager.Domain.dll
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\bin\Debug\net9.0\BookManager.Infrastructure.dll
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\bin\Debug\net9.0\BookManager.Infrastructure.pdb
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\bin\Debug\net9.0\BookManager.Domain.pdb
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\BookMana.A17D7DE5.Up2Date
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\BookManager.Application.dll
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\refint\BookManager.Application.dll
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\BookManager.Application.pdb
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Application\obj\Debug\net9.0\ref\BookManager.Application.dll

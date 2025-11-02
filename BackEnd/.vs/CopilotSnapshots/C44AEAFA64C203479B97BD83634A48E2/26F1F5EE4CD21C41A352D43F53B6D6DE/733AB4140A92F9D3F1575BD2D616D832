@@ -1,0 +1,65 @@
+﻿using FluentValidation;
+using BookManager.Application.Services;
+using BookManager.Application.Validators;
+using BookManager.Infrastructure.Data;
+using BookManager.Infrastructure.Repositories;
+using BookManager.Infrastructure.Repositories.Interfaces;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+builder.Services.AddControllers();
+
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Connection Factory
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddSingleton(new SqlConnectionFactory(connectionString));
+
+// Repositories
+builder.Services.AddScoped<IAutorRepository, AutorRepository>();
+builder.Services.AddScoped<IAssuntoRepository, AssuntoRepository>();
+builder.Services.AddScoped<IFormaPagamentoRepository, FormaPagamentoRepository>();
+builder.Services.AddScoped<ILivroRepository, LivroRepository>();
+builder.Services.AddScoped<ILivroAutorRepository, LivroAutorRepository>();
+builder.Services.AddScoped<ILivroPrecoRepository, LivroPrecoRepository>();
+
+// Services
+builder.Services.AddScoped<IAutorService, AutorService>();
+builder.Services.AddScoped<IAssuntoService, AssuntoService>();
+builder.Services.AddScoped<IFormaPagamentoService, FormaPagamentoService>();
+builder.Services.AddScoped<ILivroService, LivroService>();
+
+// FluentValidation
+builder.Services.AddValidatorsFromAssemblyContaining(typeof(CreateAutorDtoValidator));
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseCors("AllowAngular");
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

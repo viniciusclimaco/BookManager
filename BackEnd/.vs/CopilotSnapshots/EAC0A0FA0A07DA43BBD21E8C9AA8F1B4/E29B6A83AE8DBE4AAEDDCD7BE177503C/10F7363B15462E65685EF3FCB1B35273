@@ -1,0 +1,254 @@
+﻿using BookManager.Domain.Entities;
+using BookManager.Infrastructure.DTOs;
+
+namespace BookManager.Tests.Fixtures;
+
+/// <summary>
+/// Classe com dados de teste reutilizáveis
+/// </summary>
+public static class TestDataFixture
+{
+    #region Autores
+    public static Autor GetAutorValido()
+    {
+        return new Autor
+        {
+            IdAutor = 1,
+            Nome = "Machado de Assis",
+            DataCadastro = DateTime.UtcNow,
+            Ativo = true
+        };
+    }
+
+    public static CreateAutorDto GetCreateAutorDtoValido()
+    {
+        return new CreateAutorDto
+        {
+            Nome = "Machado de Assis"
+        };
+    }
+
+    public static UpdateAutorDto GetUpdateAutorDtoValido()
+    {
+        return new UpdateAutorDto
+        {
+            Nome = "Machado de Assis Atualizado",
+            Ativo = true
+        };
+    }
+
+    public static List<Autor> GetListaAutores()
+    {
+        return new List<Autor>
+        {
+            new Autor { IdAutor = 1, Nome = "Machado de Assis", DataCadastro = DateTime.UtcNow, Ativo = true },
+            new Autor { IdAutor = 2, Nome = "Clarice Lispector", DataCadastro = DateTime.UtcNow, Ativo = true },
+            new Autor { IdAutor = 3, Nome = "Jorge Amado", DataCadastro = DateTime.UtcNow, Ativo = false }
+        };
+    }
+    #endregion
+
+    #region Assuntos
+    public static Assunto GetAssuntoValido()
+    {
+        return new Assunto
+        {
+            IdAssunto = 1,
+            Descricao = "Literatura Brasileira",
+            DataCadastro = DateTime.UtcNow,
+            Ativo = true
+        };
+    }
+
+    public static CreateAssuntoDto GetCreateAssuntoDtoValido()
+    {
+        return new CreateAssuntoDto
+        {
+            Descricao = "Literatura Brasileira"
+        };
+    }
+
+    public static UpdateAssuntoDto GetUpdateAssuntoDtoValido()
+    {
+        return new UpdateAssuntoDto
+        {
+            Descricao = "Literatura Brasileira Atualizada",
+            Ativo = true
+        };
+    }
+
+    public static List<Assunto> GetListaAssuntos()
+    {
+        return new List<Assunto>
+        {
+            new Assunto { IdAssunto = 1, Descricao = "Literatura Brasileira", DataCadastro = DateTime.UtcNow, Ativo = true },
+            new Assunto { IdAssunto = 2, Descricao = "Ficção Científica", DataCadastro = DateTime.UtcNow, Ativo = true },
+            new Assunto { IdAssunto = 3, Descricao = "História", DataCadastro = DateTime.UtcNow, Ativo = false }
+        };
+    }
+    #endregion
+
+    #region Formas de Pagamento
+    public static FormaPagamento GetFormaPagamentoValida()
+    {
+        return new FormaPagamento
+        {
+            IdFormaPagamento = 1,
+            Nome = "Balcão",
+            Descricao = "Compra no balcão da livraria",            
+            Ativo = true
+        };
+    }
+
+    public static List<FormaPagamento> GetListaFormasPagamento()
+    {
+        return new List<FormaPagamento>
+        {
+            new FormaPagamento { IdFormaPagamento = 1, Nome = "Balcão", Descricao = "Compra no balcão", Ativo = true },
+            new FormaPagamento { IdFormaPagamento = 2, Nome = "Internet", Descricao = "Compra pela internet", Ativo = true },
+            new FormaPagamento { IdFormaPagamento = 3, Nome = "Self-Service", Descricao = "Autoatendimento", Ativo = true }
+        };
+    }
+    #endregion
+
+    #region Livros
+    public static Livro GetLivroValido()
+    {
+        return new Livro
+        {
+            IdLivro = 1,
+            Titulo = "Dom Casmurro",
+            Editora = "Companhia das Letras",
+            AnoPublicacao = 1899,
+            ISBN = "9788535908671", // ISBN-13 sem hífen (13 dígitos)
+            IdAssunto = 1,
+            DataCadastro = DateTime.UtcNow,
+            Ativo = true
+        };
+    }
+
+    public static CreateLivroDto GetCreateLivroDtoValido()
+    {
+        return new CreateLivroDto
+        {
+            Titulo = "Dom Casmurro",
+            Editora = "Companhia das Letras",
+            AnoPublicacao = 1899,
+            ISBN = "9788535908671", // ISBN-13 sem hífen (13 dígitos)
+            IdAssunto = 1,
+            IdAutores = new List<int> { 1 },
+            Precos = new List<CreateLivroPrecoDto>
+            {
+                new CreateLivroPrecoDto { IdFormaPagamento = 1, Valor = 45.90m },
+                new CreateLivroPrecoDto { IdFormaPagamento = 2, Valor = 39.90m }
+            }
+        };
+    }
+
+    public static UpdateLivroDto GetUpdateLivroDtoValido()
+    {
+        return new UpdateLivroDto
+        {
+            Titulo = "Dom Casmurro - Edição Especial",
+            Editora = "Companhia das Letras",
+            AnoPublicacao = 1899,
+            ISBN = "9788535908671", // ISBN-13 sem hífen (13 dígitos)
+            IdAssunto = 1,
+            Ativo = true,
+            IdAutores = new List<int> { 1 },
+            Precos = new List<CreateLivroPrecoDto>
+            {
+                new CreateLivroPrecoDto { IdFormaPagamento = 1, Valor = 49.90m }
+            }
+        };
+    }
+
+    public static List<Livro> GetListaLivros()
+    {
+        return new List<Livro>
+        {
+            new Livro { IdLivro = 1, Titulo = "Dom Casmurro", IdAssunto = 1, DataCadastro = DateTime.UtcNow, Ativo = true },
+            new Livro { IdLivro = 2, Titulo = "A Hora da Estrela", IdAssunto = 1, DataCadastro = DateTime.UtcNow, Ativo = true },
+            new Livro { IdLivro = 3, Titulo = "Capitães da Areia", IdAssunto = 1, DataCadastro = DateTime.UtcNow, Ativo = false }
+        };
+    }
+
+    public static LivroDto GetLivroDtoValido()
+    {
+        return new LivroDto
+        {
+            IdLivro = 1,
+            Titulo = "Dom Casmurro",
+            Editora = "Companhia das Letras",
+            AnoPublicacao = 1899,
+            ISBN = "9788535908671", // ISBN-13 sem hífen (13 dígitos)
+            IdAssunto = 1,
+            AssuntoDescricao = "Literatura Brasileira",
+            Ativo = true,
+            Autores = new List<LivroAutorDto>
+            {
+                new LivroAutorDto { IdAutor = 1, Nome = "Machado de Assis", Ordem = 1 }
+            },
+            Precos = new List<LivroPrecoDto>
+            {
+                new LivroPrecoDto { IdLivroPreco = 1, IdFormaPagamento = 1, FormaPagamentoNome = "Balcão", Valor = 45.90m }
+            }
+        };
+    }
+    #endregion
+
+    #region Livro-Autor
+    public static LivroAutor GetLivroAutorValido()
+    {
+        return new LivroAutor
+        {
+            IdLivro = 1,
+            IdAutor = 1,
+            Ordem = 1,
+            DataCadastro = DateTime.UtcNow
+        };
+    }
+
+    public static List<LivroAutor> GetListaLivroAutores()
+    {
+        return new List<LivroAutor>
+        {
+            new LivroAutor { IdLivro = 1, IdAutor = 1, Ordem = 1, DataCadastro = DateTime.UtcNow },
+            new LivroAutor { IdLivro = 1, IdAutor = 2, Ordem = 2, DataCadastro = DateTime.UtcNow }
+        };
+    }
+    #endregion
+
+    #region Livro-Preço
+    public static LivroPreco GetLivroPrecoValido()
+    {
+        return new LivroPreco
+        {
+            IdLivroPreco = 1,
+            IdLivro = 1,
+            IdFormaPagamento = 1,
+            Valor = 45.90m,
+            DataCadastro = DateTime.UtcNow,
+            DataAtualizacao = DateTime.UtcNow
+        };
+    }
+
+    public static List<LivroPreco> GetListaLivroPrecos()
+    {
+        return new List<LivroPreco>
+        {
+            new LivroPreco { IdLivroPreco = 1, IdLivro = 1, IdFormaPagamento = 1, Valor = 45.90m, DataCadastro = DateTime.UtcNow, DataAtualizacao = DateTime.UtcNow },
+            new LivroPreco { IdLivroPreco = 2, IdLivro = 1, IdFormaPagamento = 2, Valor = 39.90m, DataCadastro = DateTime.UtcNow, DataAtualizacao = DateTime.UtcNow }
+        };
+    }
+
+    public static CreateLivroPrecoDto GetCreateLivroPrecoDtoValido()
+    {
+        return new CreateLivroPrecoDto
+        {
+            IdFormaPagamento = 1,
+            Valor = 45.90m
+        };
+    }
+    #endregion
+}

@@ -1,0 +1,115 @@
+# ====================================================================
+# Docker Compose - BookManager Full Stack
+# Backend (.NET 8) + Frontend (Angular) + SQL Server 2022
+# SEM health check no SQL Server - usa retry interno no init-db.sh
+# ====================================================================
+
+version: "3.8"
+
+services:
+  # ============================================================
+  # SQL Server Database
+  # ============================================================
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: bookmanager-sqlserver
+    hostname: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Climaco@123"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./BackEnd/init-db:/app/init-db
+    networks:
+      - bookmanager-network
+    restart: unless-stopped
+
+  # ============================================================
+  # Database Initialization Job
+  # ============================================================
+  db_init:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: bookmanager-db-init
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./BackEnd/init-db:/app/init-db
+    working_dir: /app/init-db
+    entrypoint: ["/bin/bash", "/app/init-db/init-db.sh"]
+    networks:
+      - bookmanager-network
+    restart: "no"
+
+  # ============================================================
+  # Backend API (.NET 8)
+  # Usa o Dockerfile existente em BackEnd/
+  # ============================================================
+  backend:
+    build:
+      context: ./BackEnd
+      dockerfile: Dockerfile
+    container_name: bookmanager-backend
+    hostname: backend
+    environment:
+      # Connection String
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=BookManager;User Id=sa;Password=Climaco@123;TrustServerCertificate=True;MultipleActiveResultSets=true;"
+      
+      # ASP.NET Core Settings
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:5000"
+      
+      # CORS Settings (permitir frontend)
+      CORS__AllowedOrigins: "http://localhost:4200,http://localhost:80,http://frontend,http://localhost"
+      
+      # Logging
+      Logging__LogLevel__Default: "Information"
+      Logging__LogLevel__Microsoft: "Warning"
+      Logging__LogLevel__Microsoft__AspNetCore: "Warning"
+    ports:
+      - "5000:5000"
+    depends_on:
+      db_init:
+        condition: service_completed_successfully
+    networks:
+      - bookmanager-network
+    restart: unless-stopped
+
+  # ============================================================
+  # Frontend Angular
+  # Usa o Dockerfile existente em FrontEnd/
+  # ============================================================
+  frontend:
+    build:
+      context: ./FrontEnd
+      dockerfile: Dockerfile
+    container_name: bookmanager-frontend
+    hostname: frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - bookmanager-network
+    environment:
+      # API URL para o frontend (se necessário)
+      API_URL: "http://backend:5000"
+    restart: unless-stopped
+
+# ============================================================
+# Networks
+# ============================================================
+networks:
+  bookmanager-network:
+    driver: bridge
+    name: bookmanager-network
+
+# ============================================================
+# Volumes
+# ============================================================
+volumes:
+  sqlserver_data:
+    driver: local
+    name: bookmanager-sqlserver-data

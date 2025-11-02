@@ -1,0 +1,213 @@
+﻿using BookManager.Infrastructure.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Reporting.NETCore;
+
+namespace BookManager.API.Controllers;
+
+/// <summary>
+/// Controller responsável pela geração de relatórios em diferentes formatos
+/// Utiliza ReportViewer (RDLC) para geração profissional de relatórios
+/// </summary>
+[ApiController]
+[Route("api/[controller]")]
+public class RelatoriosController : ControllerBase
+{
+    private readonly IRelatorioRepository _relatorioRepository;
+    private readonly IWebHostEnvironment _environment;
+    private readonly ILogger<RelatoriosController> _logger;
+
+    public RelatoriosController(
+        IRelatorioRepository relatorioRepository,
+        IWebHostEnvironment environment,
+        ILogger<RelatoriosController> logger)
+    {
+        _relatorioRepository = relatorioRepository;
+        _environment = environment;
+        _logger = logger;
+    }
+
+    /// <summary>
+    /// Gera relatório de livros agrupados por assunto
+    /// </summary>
+    /// <param name="formato">Formato do arquivo: PDF, EXCEL ou WORD (padrão: PDF)</param>
+    /// <param name="idAssunto">ID do assunto para filtrar (opcional)</param>
+    /// <param name="anoInicio">Ano inicial de publicação (opcional)</param>
+    /// <param name="anoFim">Ano final de publicação (opcional)</param>
+    /// <param name="apenasAtivos">Retornar apenas livros ativos (padrão: true)</param>
+    /// <returns>Arquivo do relatório no formato especificado</returns>
+    [HttpGet("livros-por-assunto")]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GerarRelatorioLivrosPorAssunto(
+        [FromQuery] string formato = "PDF",
+        [FromQuery] int? idAssunto = null,
+        [FromQuery] int? anoInicio = null,
+        [FromQuery] int? anoFim = null,
+        [FromQuery] bool? apenasAtivos = true)
+    {
+        try
+        {
+            _logger.LogInformation("Gerando relatório de livros por assunto - Formato: {Formato}", formato);
+
+            var dados = await _relatorioRepository.ObterLivrosPorAssuntoAsync(
+                idAssunto, anoInicio, anoFim, apenasAtivos);
+
+            var resultado = GerarRelatorio(
+                "LivrosPorAssunto.rdlc",
+                dados,
+                "DsLivrosPorAssunto",
+                formato);
+
+            return File(resultado.Bytes, resultado.MimeType, resultado.NomeArquivo);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao gerar relatório de livros por assunto");
+            return StatusCode(500, new { message = $"Erro ao gerar relatório: {ex.Message}" });
+        }
+    }
+
+    /// <summary>
+    /// Gera relatório de autores com seus livros
+    /// </summary>
+    /// <param name="formato">Formato do arquivo: PDF, EXCEL ou WORD (padrão: PDF)</param>
+    /// <param name="idAutor">ID do autor para filtrar (opcional)</param>
+    /// <returns>Arquivo do relatório no formato especificado</returns>
+    [HttpGet("autores-por-livro")]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GerarRelatorioAutoresPorLivro(
+        [FromQuery] string formato = "PDF",
+        [FromQuery] int? idAutor = null)
+    {
+        try
+        {
+            _logger.LogInformation("Gerando relatório de autores por livro - Formato: {Formato}", formato);
+
+            var dados = await _relatorioRepository.ObterAutoresPorLivroAsync(idAutor);
+
+            var resultado = GerarRelatorio(
+                "AutoresPorLivro.rdlc",
+                dados,
+                "DsAutoresPorLivro",
+                formato);
+
+            return File(resultado.Bytes, resultado.MimeType, resultado.NomeArquivo);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao gerar relatório de autores por livro");
+            return StatusCode(500, new { message = $"Erro ao gerar relatório: {ex.Message}" });
+        }
+    }
+
+    /// <summary>
+    /// Gera relatório de livros com preços por forma de pagamento
+    /// </summary>
+    /// <param name="formato">Formato do arquivo: PDF, EXCEL ou WORD (padrão: PDF)</param>
+    /// <param name="valorMinimo">Valor mínimo para filtrar (opcional)</param>
+    /// <param name="valorMaximo">Valor máximo para filtrar (opcional)</param>
+    /// <param name="idFormaPagamento">ID da forma de pagamento para filtrar (opcional)</param>
+    /// <param name="apenasAtivos">Retornar apenas livros ativos (padrão: true)</param>
+    /// <returns>Arquivo do relatório no formato especificado</returns>
+    [HttpGet("livros-com-preco")]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GerarRelatorioLivrosComPreco(
+        [FromQuery] string formato = "PDF",
+        [FromQuery] decimal? valorMinimo = null,
+        [FromQuery] decimal? valorMaximo = null,
+        [FromQuery] int? idFormaPagamento = null,
+        [FromQuery] bool? apenasAtivos = true)
+    {
+        try
+        {
+            _logger.LogInformation("Gerando relatório de livros com preço - Formato: {Formato}", formato);
+
+            var dados = await _relatorioRepository.ObterLivrosComPrecoAsync(
+                valorMinimo, valorMaximo, idFormaPagamento, apenasAtivos);
+
+            var resultado = GerarRelatorio(
+                "LivrosComPreco.rdlc",
+                dados,
+                "DsLivrosComPreco",
+                formato);
+
+            return File(resultado.Bytes, resultado.MimeType, resultado.NomeArquivo);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao gerar relatório de livros com preço");
+            return StatusCode(500, new { message = $"Erro ao gerar relatório: {ex.Message}" });
+        }
+    }
+
+    /// <summary>
+    /// Método privado para geração do relatório usando ReportViewer
+    /// ⭐ CORRIGIDO: Adicionado deviceInfo para evitar páginas em branco
+    /// </summary>
+    private RelatorioResultado GerarRelatorio(
+        string nomeArquivo,
+        object dados,
+        string dataSourceName,
+        string formato)
+    {
+        var reportViewer = new LocalReport();
+        var caminhoRelatorio = Path.Combine(_environment.ContentRootPath, "Reports", nomeArquivo);
+
+        if (!System.IO.File.Exists(caminhoRelatorio))
+        {
+            throw new FileNotFoundException($"Arquivo de relatório não encontrado: {caminhoRelatorio}");
+        }
+
+        reportViewer.ReportPath = caminhoRelatorio;
+        reportViewer.DataSources.Add(new ReportDataSource(dataSourceName, dados));
+
+        string reportType = formato.ToUpper();
+        string mimeType;
+        string encoding;
+        string fileNameExtension;
+        string[] streams;
+        Warning[] warnings;
+
+        // ⭐ SOLUÇÃO: Configurar deviceInfo para evitar páginas em branco no PDF
+        string deviceInfo =
+            "<DeviceInfo>" +
+            "  <OutputFormat>" + reportType + "</OutputFormat>" +
+            "  <PageWidth>21cm</PageWidth>" +           // A4
+            "  <PageHeight>29.7cm</PageHeight>" +       // A4
+            "  <MarginTop>2cm</MarginTop>" +
+            "  <MarginLeft>2cm</MarginLeft>" +
+            "  <MarginRight>2cm</MarginRight>" +
+            "  <MarginBottom>2cm</MarginBottom>" +
+            "  <HumanReadablePDF>true</HumanReadablePDF>" +
+            "  <EmbedFonts>None</EmbedFonts>" +
+            "</DeviceInfo>";
+
+        byte[] bytes = reportViewer.Render(
+            reportType,
+            deviceInfo,  // ⭐ PARÂMETRO CRÍTICO: deviceInfo ao invés de null
+            out mimeType,
+            out encoding,
+            out fileNameExtension,
+            out streams,
+            out warnings);
+
+        return new RelatorioResultado
+        {
+            Bytes = bytes,
+            MimeType = mimeType,
+            NomeArquivo = $"Relatorio_{DateTime.Now:yyyyMMddHHmmss}.{fileNameExtension}"
+        };
+    }
+}
+
+/// <summary>
+/// Classe auxiliar para resultado da geração de relatório
+/// </summary>
+public class RelatorioResultado
+{
+    public byte[] Bytes { get; set; } = Array.Empty<byte>();
+    public string MimeType { get; set; } = string.Empty;
+    public string NomeArquivo { get; set; } = string.Empty;
+}

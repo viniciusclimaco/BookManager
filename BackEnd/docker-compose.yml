@@ -1,0 +1,114 @@
+# ====================================================================
+# Docker Compose - BookManager Backend Only
+# API .NET 8 + SQL Server 2022
+# Configuração otimizada com retry robusto
+# ====================================================================
+
+version: "3.8"
+
+services:
+  # ============================================================
+  # SQL Server Database
+  # ============================================================
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: bookmanager-backend-sqlserver
+    hostname: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Climaco@123"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_backend_data:/var/opt/mssql
+      - ./init-db:/app/init-db
+    networks:
+      - bookmanager-backend-network
+    # Health check simplificado - apenas para monitoramento
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Climaco@123 -Q 'SELECT 1' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    restart: unless-stopped
+
+  # ============================================================
+  # Database Initialization Job
+  # Não depende de health check - usa retry interno
+  # ============================================================
+  db_init:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: bookmanager-backend-db-init
+    depends_on:
+      - sqlserver  # Apenas garante que o container existe, não que está pronto
+    volumes:
+      - ./init-db:/app/init-db
+    working_dir: /app/init-db
+    entrypoint: ["/bin/bash", "/app/init-db/init-db.sh"]
+    networks:
+      - bookmanager-backend-network
+    restart: "no"
+
+  # ============================================================
+  # Backend API (.NET 8)
+  # Aguarda db_init completar antes de iniciar
+  # ============================================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bookmanager-backend-api
+    hostname: api
+    environment:
+      # Connection String
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=BookManager;User Id=sa;Password=Climaco@123;TrustServerCertificate=True;MultipleActiveResultSets=true;"
+      
+      # ASP.NET Core Settings
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:5000"
+      
+      # CORS Settings (permitir todos em desenvolvimento)
+      CORS__AllowedOrigins: "*"
+      
+      # Logging
+      Logging__LogLevel__Default: "Information"
+      Logging__LogLevel__Microsoft: "Warning"
+      Logging__LogLevel__Microsoft__AspNetCore: "Warning"
+      
+      # Database Settings
+      Database__CommandTimeout: "60"
+      Database__EnableRetryOnFailure: "true"
+      Database__MaxRetryCount: "5"
+      Database__MaxRetryDelay: "30"
+    ports:
+      - "5000:5000"
+    depends_on:
+      db_init:
+        condition: service_completed_successfully
+    networks:
+      - bookmanager-backend-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+# ============================================================
+# Networks
+# ============================================================
+networks:
+  bookmanager-backend-network:
+    driver: bridge
+    name: bookmanager-backend-network
+
+# ============================================================
+# Volumes
+# ============================================================
+volumes:
+  sqlserver_backend_data:
+    driver: local
+    name: bookmanager-backend-sqlserver-data

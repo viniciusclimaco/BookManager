@@ -1,0 +1,62 @@
+# ====================================================================
+# .dockerignore - Backend
+# ATUALIZADO: Exclui pasta de testes e arquivos desnecessários
+# ====================================================================
+
+# Build artifacts
+**/bin/
+**/obj/
+**/out/
+**/TestResults/
+
+# Testes (IMPORTANTE: Excluir do build)
+**/BookManager.Tests/
+**/*.Tests/
+**/*Tests.csproj
+**/*Test.cs
+**/*.test.cs
+
+# Solution file (não é necessário no container)
+*.sln
+
+# IDEs
+**/.vs/
+**/.vscode/
+**/.idea/
+*.swp
+*.swo
+*~
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentação
+*.md
+!README.md
+
+# Docker
+**/Dockerfile*
+**/docker-compose*
+**/.dockerignore
+
+# Logs
+**/logs/
+*.log
+
+# Coverage
+**/coverage/
+**/*.trx
+
+# Outros
+**/node_modules/
+**/wwwroot/dist/
+**/init-db/

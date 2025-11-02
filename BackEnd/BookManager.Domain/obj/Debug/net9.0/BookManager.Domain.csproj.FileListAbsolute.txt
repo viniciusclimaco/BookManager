@@ -1,0 +1,11 @@
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\bin\Debug\net9.0\BookManager.Domain.deps.json
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\bin\Debug\net9.0\BookManager.Domain.dll
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\bin\Debug\net9.0\BookManager.Domain.pdb
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\obj\Debug\net9.0\BookManager.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\obj\Debug\net9.0\BookManager.Domain.AssemblyInfoInputs.cache
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\obj\Debug\net9.0\BookManager.Domain.AssemblyInfo.cs
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\obj\Debug\net9.0\BookManager.Domain.csproj.CoreCompileInputs.cache
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\obj\Debug\net9.0\BookManager.Domain.dll
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\obj\Debug\net9.0\refint\BookManager.Domain.dll
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\obj\Debug\net9.0\BookManager.Domain.pdb
+D:\Desafio-TJRJ\Ultimo\BookManager\BookManager.Domain\obj\Debug\net9.0\ref\BookManager.Domain.dll

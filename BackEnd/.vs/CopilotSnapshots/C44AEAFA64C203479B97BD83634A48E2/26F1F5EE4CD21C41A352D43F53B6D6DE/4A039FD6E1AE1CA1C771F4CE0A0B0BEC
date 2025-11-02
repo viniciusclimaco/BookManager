@@ -1,0 +1,211 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using LibraryManager.Application.DTOs;
+using LibraryManager.Application.Services;
+
+namespace LibraryManager.API.Controllers;
+
+/// <summary>
+/// Controller para gerenciamento de Livros
+/// </summary>
+[ApiController]
+[Route("api/[controller]")]
+public class LivrosController : ControllerBase
+{
+    private readonly ILivroService _livroService;
+    private readonly ILogger<LivrosController> _logger;
+
+    public LivrosController(ILivroService livroService, ILogger<LivrosController> logger)
+    {
+        _livroService = livroService ?? throw new ArgumentNullException(nameof(livroService));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<IEnumerable<LivroDto>>> GetTodos()
+    {
+        try
+        {
+            var livros = await _livroService.GetAllAsync();
+            return Ok(livros);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao obter livros");
+            return StatusCode(500, new { mensagem = "Erro ao obter livros", erro = ex.Message });
+        }
+    }
+
+    [HttpGet("ativos")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<IEnumerable<LivroDto>>> GetAtivos()
+    {
+        try
+        {
+            var livros = await _livroService.GetAtivoAsync();
+            return Ok(livros);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao obter livros ativos");
+            return StatusCode(500, new { mensagem = "Erro ao obter livros ativos", erro = ex.Message });
+        }
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<LivroDto>> GetPorId(int id)
+    {
+        try
+        {
+            var livro = await _livroService.GetByIdAsync(id);
+            if (livro == null)
+                return NotFound(new { mensagem = $"Livro com ID {id} não encontrado" });
+
+            return Ok(livro);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Erro ao obter livro com ID {id}");
+            return StatusCode(500, new { mensagem = "Erro ao obter livro", erro = ex.Message });
+        }
+    }
+
+    [HttpGet("por-assunto/{idAssunto}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<IEnumerable<LivroDto>>> GetPorAssunto(int idAssunto)
+    {
+        try
+        {
+            var livros = await _livroService.GetByAssuntoAsync(idAssunto);
+            return Ok(livros);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Erro ao obter livros por assunto {idAssunto}");
+            return StatusCode(500, new { mensagem = "Erro ao obter livros", erro = ex.Message });
+        }
+    }
+
+    [HttpGet("por-autor/{idAutor}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<IEnumerable<LivroDto>>> GetPorAutor(int idAutor)
+    {
+        try
+        {
+            var livros = await _livroService.GetByAutorAsync(idAutor);
+            return Ok(livros);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Erro ao obter livros por autor {idAutor}");
+            return StatusCode(500, new { mensagem = "Erro ao obter livros", erro = ex.Message });
+        }
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<int>> Criar([FromBody] CreateLivroDto dto)
+    {
+        try
+        {
+            var idLivro = await _livroService.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetPorId), new { id = idLivro }, new { id = idLivro });
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+            return BadRequest(new { mensagem = "Dados inválidos", erros = ex.Errors.Select(e => e.ErrorMessage) });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return BadRequest(new { mensagem = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { mensagem = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao criar livro");
+            return StatusCode(500, new { mensagem = "Erro ao criar livro", erro = ex.Message });
+        }
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<bool>> Atualizar(int id, [FromBody] UpdateLivroDto dto)
+    {
+        try
+        {
+            var result = await _livroService.UpdateAsync(id, dto);
+            return Ok(new { sucesso = result, mensagem = result ? "Livro atualizado com sucesso" : "Erro ao atualizar livro" });
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+            return BadRequest(new { mensagem = "Dados inválidos", erros = ex.Errors.Select(e => e.ErrorMessage) });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return BadRequest(new { mensagem = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { mensagem = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Erro ao atualizar livro com ID {id}");
+            return StatusCode(500, new { mensagem = "Erro ao atualizar livro", erro = ex.Message });
+        }
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<bool>> Deletar(int id)
+    {
+        try
+        {
+            var result = await _livroService.DeleteAsync(id);
+            return Ok(new { sucesso = result, mensagem = result ? "Livro deletado com sucesso" : "Erro ao deletar livro" });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { mensagem = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Erro ao deletar livro com ID {id}");
+            return StatusCode(500, new { mensagem = "Erro ao deletar livro", erro = ex.Message });
+        }
+    }
+
+    [HttpGet("relatorio/autores-agrupados")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<IEnumerable<RelatorioAutorAgrupado>>> GetRelatorio()
+    {
+        try
+        {
+            var relatorio = await _livroService.GetRelatorioAsync();
+            return Ok(relatorio);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao obter relatório de livros");
+            return StatusCode(500, new { mensagem = "Erro ao obter relatório", erro = ex.Message });
+        }
+    }
+}

@@ -1,0 +1,1717 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "BookManager.API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/Assuntos": {
+      "get": {
+        "tags": [
+          "Assuntos"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssuntoDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssuntoDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssuntoDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Assuntos"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssuntoDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssuntoDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssuntoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Assuntos/ativos": {
+      "get": {
+        "tags": [
+          "Assuntos"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssuntoDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssuntoDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssuntoDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Assuntos/{id}": {
+      "get": {
+        "tags": [
+          "Assuntos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssuntoDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssuntoDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssuntoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Assuntos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAssuntoDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAssuntoDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAssuntoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Assuntos"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Autores": {
+      "get": {
+        "tags": [
+          "Autores"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutorDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutorDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutorDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Autores"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAutorDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAutorDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAutorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Autores/ativos": {
+      "get": {
+        "tags": [
+          "Autores"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutorDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutorDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutorDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Autores/{id}": {
+      "get": {
+        "tags": [
+          "Autores"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutorDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutorDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Autores"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAutorDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAutorDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAutorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Autores"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/FormasPagamento": {
+      "get": {
+        "tags": [
+          "FormasPagamento"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FormaPagamentoDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FormaPagamentoDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FormaPagamentoDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/FormasPagamento/ativos": {
+      "get": {
+        "tags": [
+          "FormasPagamento"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FormaPagamentoDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FormaPagamentoDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FormaPagamentoDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/FormasPagamento/{id}": {
+      "get": {
+        "tags": [
+          "FormasPagamento"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormaPagamentoDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormaPagamentoDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormaPagamentoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Livros": {
+      "get": {
+        "tags": [
+          "Livros"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Livros"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLivroDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLivroDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLivroDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Livros/ativos": {
+      "get": {
+        "tags": [
+          "Livros"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Livros/{id}": {
+      "get": {
+        "tags": [
+          "Livros"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LivroDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LivroDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LivroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Livros"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLivroDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLivroDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLivroDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Livros"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Livros/por-assunto/{idAssunto}": {
+      "get": {
+        "tags": [
+          "Livros"
+        ],
+        "parameters": [
+          {
+            "name": "idAssunto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/Livros/por-autor/{idAutor}": {
+      "get": {
+        "tags": [
+          "Livros"
+        ],
+        "parameters": [
+          {
+            "name": "idAutor",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LivroDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssuntoDto": {
+        "type": "object",
+        "properties": {
+          "idAssunto": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "descricao": {
+            "type": "string",
+            "nullable": true
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AutorDto": {
+        "type": "object",
+        "properties": {
+          "idAutor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string",
+            "nullable": true
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateAssuntoDto": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateAutorDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateLivroDto": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "nullable": true
+          },
+          "editora": {
+            "type": "string",
+            "nullable": true
+          },
+          "anoPublicacao": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "idAssunto": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idAutores": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "precos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateLivroPrecoDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateLivroPrecoDto": {
+        "type": "object",
+        "properties": {
+          "idFormaPagamento": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valor": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FormaPagamentoDto": {
+        "type": "object",
+        "properties": {
+          "idFormaPagamento": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string",
+            "nullable": true
+          },
+          "descricao": {
+            "type": "string",
+            "nullable": true
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LivroAutorDto": {
+        "type": "object",
+        "properties": {
+          "idAutor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nome": {
+            "type": "string",
+            "nullable": true
+          },
+          "ordem": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LivroDto": {
+        "type": "object",
+        "properties": {
+          "idLivro": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "titulo": {
+            "type": "string",
+            "nullable": true
+          },
+          "editora": {
+            "type": "string",
+            "nullable": true
+          },
+          "anoPublicacao": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "idAssunto": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "assuntoDescricao": {
+            "type": "string",
+            "nullable": true
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "autores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LivroAutorDto"
+            },
+            "nullable": true
+          },
+          "precos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LivroPrecoDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LivroPrecoDto": {
+        "type": "object",
+        "properties": {
+          "idLivroPreco": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idFormaPagamento": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "formaPagamentoNome": {
+            "type": "string",
+            "nullable": true
+          },
+          "valor": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "UpdateAssuntoDto": {
+        "type": "object",
+        "properties": {
+          "descricao": {
+            "type": "string",
+            "nullable": true
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateAutorDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "nullable": true
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateLivroDto": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "nullable": true
+          },
+          "editora": {
+            "type": "string",
+            "nullable": true
+          },
+          "anoPublicacao": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "idAssunto": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "idAutores": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "precos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateLivroPrecoDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

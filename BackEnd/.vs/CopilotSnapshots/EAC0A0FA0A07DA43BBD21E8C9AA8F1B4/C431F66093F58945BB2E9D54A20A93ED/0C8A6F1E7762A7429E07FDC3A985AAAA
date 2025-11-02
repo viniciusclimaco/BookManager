@@ -1,0 +1,30 @@
+﻿namespace BookManager.Infrastructure.DTOs;
+
+/// <summary>
+/// DTO para transferência de dados do Preço do Livro
+/// </summary>
+public class LivroPrecoDto
+{
+    public int IdLivroPreco { get; set; }
+    public int IdFormaPagamento { get; set; }
+    public string? FormaPagamentoNome { get; set; }
+    public decimal Valor { get; set; }
+}
+
+/// <summary>
+/// DTO para criação de Preço do Livro
+/// </summary>
+public class CreateLivroPrecoDto
+{
+    public int IdFormaPagamento { get; set; }
+    public decimal Valor { get; set; }
+}
+
+/// <summary>
+/// DTO para atualização de Preço do Livro
+/// </summary>
+public class UpdateLivroPrecoDto
+{
+    public int IdFormaPagamento { get; set; }
+    public decimal Valor { get; set; }
+}

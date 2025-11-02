@@ -1,0 +1,173 @@
+﻿using System;
+using Microsoft.Data.SqlClient;
+using System.Text.RegularExpressions;
+using BookManager.Domain.Exceptions;
+
+namespace BookManager.Infrastructure.Extensions;
+
+/// <summary>
+/// Helper para converter SqlException em exceções customizadas de domínio
+/// </summary>
+public static class SqlExceptionHandler
+{
+    // Códigos de erro SQL Server
+    private const int UniqueKeyViolation = 2627;
+    private const int UniqueIndexViolation = 2601;
+    private const int ForeignKeyViolation = 547;
+    private const int DeadlockVictim = 1205;
+    private const int TimeoutExpired = -2;
+
+    /// <summary>
+    /// Converte SqlException em exceção de domínio apropriada
+    /// </summary>
+    public static Exception ConvertToBusinessException(SqlException sqlException, string context = "")
+    {
+        return sqlException.Number switch
+        {
+            UniqueKeyViolation or UniqueIndexViolation => ParseUniqueKeyViolation(sqlException),
+            ForeignKeyViolation => ParseForeignKeyViolation(sqlException, context),
+            DeadlockVictim => new DatabaseDeadlockException(sqlException),
+            TimeoutExpired => new DatabaseTimeoutException(sqlException),
+            _ => sqlException // Retorna a exceção original se não for um erro conhecido
+        };
+    }
+
+    /// <summary>
+    /// Tenta executar uma operação tratando exceções SQL específicas
+    /// </summary>
+    public static async Task<T> ExecuteWithSqlExceptionHandlingAsync<T>(
+        Func<Task<T>> operation, 
+        string context = "")
+    {
+        try
+        {
+            return await operation();
+        }
+        catch (SqlException sqlEx)
+        {
+            throw ConvertToBusinessException(sqlEx, context);
+        }
+    }
+
+    /// <summary>
+    /// Tenta executar uma operação tratando exceções SQL específicas (sem retorno)
+    /// </summary>
+    public static async Task ExecuteWithSqlExceptionHandlingAsync(
+        Func<Task> operation,
+        string context = "")
+    {
+        try
+        {
+            await operation();
+        }
+        catch (SqlException sqlEx)
+        {
+            throw ConvertToBusinessException(sqlEx, context);
+        }
+    }
+
+    private static Exception ParseUniqueKeyViolation(SqlException sqlException)
+    {
+        var message = sqlException.Message;
+
+        // Tenta extrair o nome do campo do constraint
+        // Exemplo: "Violation of UNIQUE KEY constraint 'UQ_Livro_ISBN'"
+        var match = Regex.Match(message, @"'([^']*)'", RegexOptions.IgnoreCase);
+        var constraintName = match.Success ? match.Groups[1].Value : "unknown";
+
+        // Tenta identificar qual campo específico
+        string fieldName = "campo";
+        if (constraintName.Contains("ISBN", StringComparison.OrdinalIgnoreCase))
+            fieldName = "ISBN";
+        else if (constraintName.Contains("Nome", StringComparison.OrdinalIgnoreCase))
+            fieldName = "Nome";
+        else if (constraintName.Contains("Descricao", StringComparison.OrdinalIgnoreCase))
+            fieldName = "Descrição";
+        else if (constraintName.Contains("Email", StringComparison.OrdinalIgnoreCase))
+            fieldName = "E-mail";
+
+        return new UniqueKeyViolationException(fieldName, null, sqlException);
+    }
+
+    private static Exception ParseForeignKeyViolation(SqlException sqlException, string context)
+    {
+        var message = sqlException.Message;
+
+        // Extrai informações da mensagem de erro
+        // Exemplo: "The DELETE statement conflicted with the REFERENCE constraint 'FK_LivroAutor_Autor'"
+        var match = Regex.Match(message, @"'FK_(\w+)_(\w+)'", RegexOptions.IgnoreCase);
+
+        if (match.Success)
+        {
+            var childTable = match.Groups[1].Value; // Ex: LivroAutor
+            var parentTable = match.Groups[2].Value; // Ex: Autor
+
+            // Traduz nomes técnicos para nomes amigáveis
+            var friendlyChildName = GetFriendlyTableName(childTable);
+            var friendlyParentName = GetFriendlyTableName(parentTable);
+
+            // Tenta extrair o ID do contexto
+            var idMatch = Regex.Match(context, @"ID[:\s]+(\d+)", RegexOptions.IgnoreCase);
+            var entityId = idMatch.Success ? int.Parse(idMatch.Groups[1].Value) : 0;
+
+            return new ForeignKeyViolationException(
+                friendlyParentName,
+                entityId,
+                friendlyChildName,
+                sqlException);
+        }
+
+        // Se não conseguir parsear, retorna exceção genérica mas amigável
+        return new InvalidOperationException(
+            "Não é possível excluir este registro pois existem outros registros dependentes. " +
+            "Por favor, remova as dependências primeiro.",
+            sqlException);
+    }
+
+    private static string GetFriendlyTableName(string tableName)
+    {
+        return tableName switch
+        {
+            "Autor" => "Autor",
+            "Livro" => "Livro",
+            "Assunto" => "Assunto",
+            "LivroAutor" => "Livro-Autor",
+            "LivroPreco" => "Preço do Livro",
+            "FormaPagamento" => "Forma de Pagamento",
+            _ => tableName
+        };
+    }
+
+    /// <summary>
+    /// Verifica se uma exceção é uma violação de chave única
+    /// </summary>
+    public static bool IsUniqueKeyViolation(SqlException sqlException)
+    {
+        return sqlException.Number == UniqueKeyViolation || 
+               sqlException.Number == UniqueIndexViolation;
+    }
+
+    /// <summary>
+    /// Verifica se uma exceção é uma violação de chave estrangeira
+    /// </summary>
+    public static bool IsForeignKeyViolation(SqlException sqlException)
+    {
+        return sqlException.Number == ForeignKeyViolation;
+    }
+
+    /// <summary>
+    /// Verifica se uma exceção é um deadlock
+    /// </summary>
+    public static bool IsDeadlock(SqlException sqlException)
+    {
+        return sqlException.Number == DeadlockVictim;
+    }
+
+    /// <summary>
+    /// Verifica se uma exceção é um timeout
+    /// </summary>
+    public static bool IsTimeout(SqlException sqlException)
+    {
+        return sqlException.Number == TimeoutExpired;
+    }
+}

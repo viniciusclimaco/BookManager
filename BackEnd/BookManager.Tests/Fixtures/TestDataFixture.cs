@@ -14,7 +14,7 @@ public static class TestDataFixture
         return new Autor
         {
             IdAutor = 1,
-            Nome = "Machado de Assis",
+            Nome = "J.K. Rowling",
             DataCadastro = DateTime.UtcNow,
             Ativo = true
         };
@@ -24,7 +24,7 @@ public static class TestDataFixture
     {
         return new CreateAutorDto
         {
-            Nome = "Machado de Assis"
+            Nome = "J.K. Rowling"
         };
     }
 
@@ -32,7 +32,7 @@ public static class TestDataFixture
     {
         return new UpdateAutorDto
         {
-            Nome = "Machado de Assis Atualizado",
+            Nome = "J.K. Rowling Atualizado",
             Ativo = true
         };
     }
@@ -41,7 +41,7 @@ public static class TestDataFixture
     {
         return new List<Autor>
         {
-            new Autor { IdAutor = 1, Nome = "Machado de Assis", DataCadastro = DateTime.UtcNow, Ativo = true },
+            new Autor { IdAutor = 1, Nome = "J.K. Rowling", DataCadastro = DateTime.UtcNow, Ativo = true },
             new Autor { IdAutor = 2, Nome = "Clarice Lispector", DataCadastro = DateTime.UtcNow, Ativo = true },
             new Autor { IdAutor = 3, Nome = "Jorge Amado", DataCadastro = DateTime.UtcNow, Ativo = false }
         };
@@ -187,7 +187,7 @@ public static class TestDataFixture
             Ativo = true,
             Autores = new List<LivroAutorDto>
             {
-                new LivroAutorDto { IdAutor = 1, Nome = "Machado de Assis", Ordem = 1 }
+                new LivroAutorDto { IdAutor = 1, Nome = "J.K. Rowling", Ordem = 1 }
             },
             Precos = new List<LivroPrecoDto>
             {

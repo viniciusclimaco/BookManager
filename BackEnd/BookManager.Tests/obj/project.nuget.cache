@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Pxv0CECaRzw=",
+  "dgSpecHash": "lC475HaBKzU=",
   "success": true,
-  "projectFilePath": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Tests\\BookManager.Tests.csproj",
+  "projectFilePath": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Tests\\BookManager.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USUARIO\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\USUARIO\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",

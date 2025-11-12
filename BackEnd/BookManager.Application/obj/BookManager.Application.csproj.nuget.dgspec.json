@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Application\\BookManager.Application.csproj": {}
+    "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Application\\BookManager.Application.csproj": {}
   },
   "projects": {
-    "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Application\\BookManager.Application.csproj": {
+    "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Application\\BookManager.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Application\\BookManager.Application.csproj",
+        "projectUniqueName": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Application\\BookManager.Application.csproj",
         "projectName": "BookManager.Application",
-        "projectPath": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Application\\BookManager.Application.csproj",
+        "projectPath": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Application\\BookManager.Application.csproj",
         "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
-        "outputPath": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Application\\obj\\",
+        "outputPath": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -34,8 +34,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj": {
-                "projectPath": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj"
+              "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj": {
+                "projectPath": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj"
               }
             }
           }
@@ -85,14 +85,14 @@
         }
       }
     },
-    "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj": {
+    "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj",
+        "projectUniqueName": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj",
         "projectName": "BookManager.Domain",
-        "projectPath": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj",
+        "projectPath": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj",
         "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
-        "outputPath": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Domain\\obj\\",
+        "outputPath": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -152,14 +152,14 @@
         }
       }
     },
-    "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj": {
+    "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj",
+        "projectUniqueName": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj",
         "projectName": "BookManager.Infrastructure",
-        "projectPath": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj",
+        "projectPath": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Infrastructure\\BookManager.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
-        "outputPath": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Infrastructure\\obj\\",
+        "outputPath": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -182,8 +182,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj": {
-                "projectPath": "D:\\Desafio-TJRJ\\Ultimo\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj"
+              "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj": {
+                "projectPath": "D:\\Desafio-TJRJ\\teste-clone\\BookManager\\BackEnd\\BookManager.Domain\\BookManager.Domain.csproj"
               }
             }
           }

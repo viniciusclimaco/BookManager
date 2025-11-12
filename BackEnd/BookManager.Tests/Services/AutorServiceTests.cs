@@ -8,6 +8,7 @@ using FluentValidation;
 using Moq;
 using Xunit;
 using Microsoft.Extensions.Logging;
+using BookManager.Domain.Exceptions;
 
 namespace BookManager.Tests.Services;
 
@@ -30,7 +31,7 @@ public class AutorServiceTests
         _createValidatorMock = new Mock<IValidator<CreateAutorDto>>();
         _updateValidatorMock = new Mock<IValidator<UpdateAutorDto>>();
         _loggerMock = new Mock<ILogger<AutorService>>();
-        
+
         _autorService = new AutorService(
             _autorRepositoryMock.Object,
             _livroRepositoryMock.Object,
@@ -139,13 +140,13 @@ public class AutorServiceTests
         // Arrange
         var dto = TestDataFixture.GetCreateAutorDtoValido();
         var idEsperado = 1;
-        
+
         _createValidatorMock.Setup(v => v.ValidateAsync(dto, default))
             .ReturnsAsync(new FluentValidation.Results.ValidationResult());
-        
+
         _autorRepositoryMock.Setup(r => r.GetByNomeAsync(dto.Nome))
             .ReturnsAsync((Autor?)null);
-        
+
         _autorRepositoryMock.Setup(r => r.CreateAsync(It.IsAny<Autor>()))
             .ReturnsAsync(idEsperado);
 
@@ -168,7 +169,7 @@ public class AutorServiceTests
         {
             new FluentValidation.Results.ValidationFailure("Nome", "Nome é obrigatório")
         };
-        
+
         _createValidatorMock.Setup(v => v.ValidateAsync(dto, default))
             .ReturnsAsync(new FluentValidation.Results.ValidationResult(validationFailures));
 
@@ -176,29 +177,32 @@ public class AutorServiceTests
         await Assert.ThrowsAsync<ValidationException>(
             async () => await _autorService.CreateAsync(dto)
         );
-        
+
         _createValidatorMock.Verify(v => v.ValidateAsync(dto, default), Times.Once);
         _autorRepositoryMock.Verify(r => r.CreateAsync(It.IsAny<Autor>()), Times.Never);
     }
 
     [Fact]
-    public async Task CreateAsync_ComNomeDuplicado_DeveLancarInvalidOperationException()
+    public async Task CreateAsync_ComNomeDuplicado_DeveLancarDuplicateResourceException()
     {
         // Arrange
         var dto = TestDataFixture.GetCreateAutorDtoValido();
         var autorExistente = TestDataFixture.GetAutorValido();
-        
+
         _createValidatorMock.Setup(v => v.ValidateAsync(dto, default))
             .ReturnsAsync(new FluentValidation.Results.ValidationResult());
-        
+
         _autorRepositoryMock.Setup(r => r.GetByNomeAsync(dto.Nome))
             .ReturnsAsync(autorExistente);
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _autorService.CreateAsync(dto)
-        );
-        
+        var exception = await Assert.ThrowsAsync<DuplicateResourceException>(
+            async () => await _autorService.CreateAsync(dto));
+
+        exception.ResourceType.Should().Be("Autor");
+        exception.FieldName.Should().Be("Nome");
+        exception.Value.Should().Be(dto.Nome);
+
         _autorRepositoryMock.Verify(r => r.CreateAsync(It.IsAny<Autor>()), Times.Never);
     }
     #endregion
@@ -211,16 +215,16 @@ public class AutorServiceTests
         var id = 1;
         var dto = TestDataFixture.GetUpdateAutorDtoValido();
         var autorExistente = TestDataFixture.GetAutorValido();
-        
+
         _updateValidatorMock.Setup(v => v.ValidateAsync(dto, default))
             .ReturnsAsync(new FluentValidation.Results.ValidationResult());
-        
+
         _autorRepositoryMock.Setup(r => r.GetByIdAsync(id))
             .ReturnsAsync(autorExistente);
-        
+
         _autorRepositoryMock.Setup(r => r.GetByNomeAsync(dto.Nome))
             .ReturnsAsync((Autor?)null);
-        
+
         _autorRepositoryMock.Setup(r => r.UpdateAsync(It.IsAny<Autor>()))
             .ReturnsAsync(true);
 
@@ -240,10 +244,10 @@ public class AutorServiceTests
         // Arrange
         var id = 999;
         var dto = TestDataFixture.GetUpdateAutorDtoValido();
-        
+
         _updateValidatorMock.Setup(v => v.ValidateAsync(dto, default))
             .ReturnsAsync(new FluentValidation.Results.ValidationResult());
-        
+
         _autorRepositoryMock.Setup(r => r.GetByIdAsync(id))
             .ReturnsAsync((Autor?)null);
 
@@ -251,12 +255,12 @@ public class AutorServiceTests
         await Assert.ThrowsAsync<KeyNotFoundException>(
             async () => await _autorService.UpdateAsync(id, dto)
         );
-        
+
         _autorRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Autor>()), Times.Never);
     }
 
     [Fact]
-    public async Task UpdateAsync_ComNomeDuplicado_DeveLancarInvalidOperationException()
+    public async Task UpdateAsync_ComNomeDuplicado_DeveLancarDuplicateResourceException()  // ✅
     {
         // Arrange
         var id = 1;
@@ -264,21 +268,26 @@ public class AutorServiceTests
         var autorExistente = TestDataFixture.GetAutorValido();
         var autorComMesmoNome = TestDataFixture.GetAutorValido();
         autorComMesmoNome.IdAutor = 2;
-        
+
         _updateValidatorMock.Setup(v => v.ValidateAsync(dto, default))
             .ReturnsAsync(new FluentValidation.Results.ValidationResult());
-        
+
         _autorRepositoryMock.Setup(r => r.GetByIdAsync(id))
             .ReturnsAsync(autorExistente);
-        
+
         _autorRepositoryMock.Setup(r => r.GetByNomeAsync(dto.Nome))
             .ReturnsAsync(autorComMesmoNome);
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(
+        var exception = await Assert.ThrowsAsync<DuplicateResourceException>(  // ✅
             async () => await _autorService.UpdateAsync(id, dto)
         );
-        
+
+        // Verificações adicionais
+        exception.ResourceType.Should().Be("Autor");
+        exception.FieldName.Should().Be("Nome");
+        exception.Value.Should().Be(dto.Nome);
+
         _autorRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Autor>()), Times.Never);
     }
     #endregion
@@ -290,10 +299,10 @@ public class AutorServiceTests
         // Arrange
         var id = 1;
         var autor = TestDataFixture.GetAutorValido();
-        
+
         _autorRepositoryMock.Setup(r => r.GetByIdAsync(id))
             .ReturnsAsync(autor);
-        
+
         _autorRepositoryMock.Setup(r => r.DeleteAsync(id))
             .ReturnsAsync(true);
 
@@ -311,7 +320,7 @@ public class AutorServiceTests
     {
         // Arrange
         var id = 999;
-        
+
         _autorRepositoryMock.Setup(r => r.GetByIdAsync(id))
             .ReturnsAsync((Autor?)null);
 
@@ -319,7 +328,7 @@ public class AutorServiceTests
         await Assert.ThrowsAsync<KeyNotFoundException>(
             async () => await _autorService.DeleteAsync(id)
         );
-        
+
         _autorRepositoryMock.Verify(r => r.DeleteAsync(id), Times.Never);
     }
     #endregion
